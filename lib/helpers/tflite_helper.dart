@@ -15,22 +15,22 @@ class TFLiteHelper {
   static List<Result> _outputs = [];
   static var modelLoaded = false;
 
-  static Future<Future<String?>> loadModel() async{
+  static Future<String?> loadModel() async{
     AppHelper.log("loadModel", "Loading model..");
 
-    return Tflite.loadModel(
-      model: "assets/ASL_classifier.tflite",
-      labels: "assets/labels.txt",
+    return await Tflite.loadModel(
+      model: "assets/converted_tflite_(2).tflite",
+      labels: "assets/labels_converted_tflite_(2).txt",
     );
   }
 
   static classifyImage(CameraImage image) async {
 
     await Tflite.runModelOnFrame(
-        threshold: 0.1,     // defaults to 0.1
+        threshold: 0.2,     // defaults to 0.1
         asynch: true ,
-        imageHeight: 200,
-        imageWidth: 200,
+        imageHeight: image.height,
+        imageWidth: image.width,
         bytesList: image.planes.map((plane) {
               return plane.bytes  ;
             }).toList() ,
@@ -65,3 +65,25 @@ class TFLiteHelper {
     tfLiteResultsController.close();
   }
 }
+
+/*
+PlatformException (PlatformException(Failed to load model, flutter_assets/assets/teachable signlanguage.tflite, java.io.FileNotFoundException: flutter_assets/assets/teachable signlanguage.tflite
+	at android.content.res.AssetManager.nativeOpenAssetFd(Native Method)
+	at android.content.res.AssetManager.openFd(AssetManager.java:880)
+	at sq.flutter.flutter_tflite.TflitePlugin.loadModel(TflitePlugin.java:245)
+	at sq.flutter.flutter_tflite.TflitePlugin.onMethodCall(TflitePlugin.java:132)
+	at io.flutter.plugin.common.MethodChannel$IncomingMethodCallHandler.onMessage(MethodChannel.java:258)
+	at io.flutter.embedding.engine.dart.DartMessenger.invokeHandler(DartMessenger.java:295)
+	at io.flutter.embedding.engine.dart.DartMessenger.lambda$dispatchMessageToQueue$0$io-flutter-embedding-engine-dart-DartMessenger(DartMessenger.java:322)
+	at io.flutter.embedding.engine.dart.DartMessenger$$ExternalSyntheticLambda0.run(Unknown Source:12)
+	at android.os.Handler.handleCallback(Handler.java:899)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loop(Looper.java:238)
+	at android.app.ActivityThread.main(ActivityThread.java:7853)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:984)
+, null))
+loading
+
+*/

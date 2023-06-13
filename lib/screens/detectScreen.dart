@@ -147,7 +147,7 @@ class _DetectScreenState extends State<DetectScreen>
                           ),
                         ),
                         Center(
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               speak("${outputs[index].label}");
                             },
